@@ -1,38 +1,16 @@
 <template>
   <div class="app">
-    <form action="#" @submit.prevent>
-      <h4>Создание миссии</h4>
-      <input
-        type="text"
-        placeholder="Название"
-        class="input"
-        v-bind:value="title"
-        @input="title = $event.target.value"
-      />
-      <input
-        type="text"
-        placeholder="Описание"
-        class="input"
-        v-bind:value="body"
-        @input="body = $event.target.value"
-      />
-      <button class="btn" @click="createMission">Создать</button>
-    </form>
-    <div class="mission" v-for="mission in missions">
-      <div>
-        <strong>Название:</strong>
-        {{ mission.title }}
-      </div>
-      <div>
-        <strong>Описание:</strong>
-        {{ mission.body }}
-      </div>
-    </div>
+    <mission-form />
+    <mission-list :missions="missions" />
   </div>
 </template>
 
 <script>
+import MissionForm from "@/components/MissionForm/MissionForm.vue";
+import MissionList from "@/components/MissionList/MissionList.vue";
+
 export default {
+  components: { MissionList, MissionForm },
   data() {
     return {
       missions: [
@@ -52,25 +30,9 @@ export default {
           body: "Путешествие в мир реактивных модалок для создания сущностей",
         },
       ],
-      title: "",
-      body: "",
     };
   },
-  methods: {
-    createMission() {
-      const newMission = {
-        id: Date.now(),
-        title: this.title,
-        body: this.body,
-      };
-      this.missions.push(newMission);
-      this.title = "";
-      this.body = "";
-    },
-    inputTitle(event) {
-      this.title = event.target.value;
-    },
-  },
+  methods: {},
 };
 </script>
 
@@ -83,32 +45,5 @@ export default {
 
 .app {
   padding: 20px;
-}
-
-form {
-  width: 30%;
-  display: flex;
-  flex-direction: column;
-  row-gap: 15px;
-}
-
-.mission {
-  padding: 15px;
-  border: 2px solid teal;
-  margin-top: 15px;
-}
-
-.input {
-  width: 100%;
-  border: 1px solid teal;
-  padding: 10px 15px;
-}
-
-.btn {
-  align-self: flex-end;
-  padding: 10px 15px;
-  background: none;
-  color: teal;
-  border: 1px solid teal;
 }
 </style>
