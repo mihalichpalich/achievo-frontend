@@ -16,6 +16,11 @@ export default defineComponent({
 <template>
   <div>
     <h3>Список миссий</h3>
-    <mission-item v-for="mission in missions" :mission="mission" />
+    <mission-item
+      v-for="mission in missions"
+      :mission="mission"
+      :key="mission.id"
+      @remove="$emit('remove', mission)"
+    />
   </div>
 </template>

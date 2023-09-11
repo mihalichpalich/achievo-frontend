@@ -3,11 +3,13 @@
 </style>
 
 <script lang="ts">
-import { ref } from "vue";
+import { defineComponent, ref, Ref, SetupContext } from "vue";
 
-export default {
-  setup() {
-    const mission = ref({
+import { Mission } from "@/types/mission";
+
+export default defineComponent({
+  setup(_, { emit }: SetupContext) {
+    const mission: Ref<Mission> = ref({
       title: "",
       body: "",
     });
@@ -26,7 +28,7 @@ export default {
       createMission,
     };
   },
-};
+});
 </script>
 
 <template>

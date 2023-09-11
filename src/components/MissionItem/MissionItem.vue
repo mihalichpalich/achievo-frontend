@@ -2,13 +2,15 @@
 @import "styles.scss";
 </style>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
+
+import { Mission } from "@/types/mission";
 
 export default defineComponent({
   props: {
     mission: {
-      type: Object,
+      type: Object as () => Mission,
       required: true,
     },
   },
@@ -28,7 +30,7 @@ export default defineComponent({
       </div>
     </div>
     <div class="mission__btns">
-      <app-button>Удалить</app-button>
+      <app-button @click="$emit('remove', mission)">Удалить</app-button>
     </div>
   </div>
 </template>
