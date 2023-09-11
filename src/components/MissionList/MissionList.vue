@@ -1,27 +1,21 @@
-<style scoped>
-@import "styles.scss";
-</style>
+<script lang="ts">
+import { defineComponent } from "vue";
+import MissionItem from "../MissionItem/MissionItem.vue";
 
-<script>
-export default {
+export default defineComponent({
+  components: { MissionItem },
   props: {
     missions: {
       type: Array,
       required: true,
     },
   },
-};
+});
 </script>
 
 <template>
-  <div class="mission" v-for="mission in missions">
-    <div>
-      <strong>Название:</strong>
-      {{ mission.title }}
-    </div>
-    <div>
-      <strong>Описание:</strong>
-      {{ mission.body }}
-    </div>
+  <div>
+    <h3>Список миссий</h3>
+    <mission-item v-for="mission in missions" :mission="mission" />
   </div>
 </template>

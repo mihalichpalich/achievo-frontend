@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <mission-form />
+    <mission-form @create="createMission" />
     <mission-list :missions="missions" />
   </div>
 </template>
@@ -32,7 +32,11 @@ export default {
       ],
     };
   },
-  methods: {},
+  methods: {
+    createMission(mission) {
+      this.missions.push(mission);
+    },
+  },
 };
 </script>
 
