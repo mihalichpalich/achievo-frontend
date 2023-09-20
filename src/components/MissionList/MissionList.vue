@@ -20,12 +20,14 @@ export default defineComponent({
 <template>
   <div v-if="missions.length > 0">
     <h3>Список миссий</h3>
-    <mission-item
-      v-for="mission in missions"
-      :mission="mission"
-      :key="mission.id"
-      @remove="$emit('remove', mission)"
-    />
+    <transition-group name="mission-list">
+      <mission-item
+          v-for="mission in missions"
+          :mission="mission"
+          :key="mission.id"
+          @remove="$emit('remove', mission)"
+      />
+    </transition-group>
   </div>
   <h2 v-else class="empty-message">Список миссий пуст</h2>
 </template>
