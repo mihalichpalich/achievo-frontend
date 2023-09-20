@@ -3,7 +3,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import components from "@/components/ui";
 
-import './index.scss'
+import './index.css'
 
 const app = createApp(App);
 

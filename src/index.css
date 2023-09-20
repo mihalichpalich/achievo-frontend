@@ -10,3 +10,8 @@
   flex-direction: column;
   row-gap: 2vh;
 }
+
+.app__btns {
+  display: flex;
+  column-gap: 2vw;
+}
