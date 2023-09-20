@@ -5,10 +5,11 @@ import MissionForm from "@/components/MissionForm/MissionForm.vue";
 import MissionList from "@/components/MissionList/MissionList.vue";
 import AppDialog from "@/components/ui/AppDialog/AppDialog.vue";
 import AppButton from "@/components/ui/AppButton/AppButton.vue";
+import AppSelect from "@/components/ui/AppSelect/AppSelect.vue";
 
 import { Mission } from "@/types/mission";
 import { fetchMissions } from "@/services/missions";
-import AppSelect from "@/components/ui/AppSelect/AppSelect.vue";
+import { sortOptions } from "@/dicts/sortOptions";
 
 export default defineComponent({
   components: {AppSelect, AppButton, AppDialog, MissionForm, MissionList},
@@ -16,16 +17,7 @@ export default defineComponent({
     const missions: Ref<Mission[]> = ref([]);
     const dialogVisible = ref(false)
     const selectedSort = ref<'title' | 'body' | ''>('')
-    const sortOptions = [
-      {
-        value: 'title',
-        name: 'По названию'
-      },
-      {
-        value: 'body',
-        name: 'По содержимому'
-      }
-    ]
+    const searchQuery = ref('')
 
     const sortedMissions = computed(() => [...missions.value].sort((m1, m2) => {
       if (selectedSort.value) {
@@ -34,6 +26,9 @@ export default defineComponent({
 
       return 0
     }));
+
+    const sortedAndSearchedPosts = computed(() =>
+        sortedMissions.value.filter(mission => mission.title.toLowerCase().includes(searchQuery.value.toLowerCase())))
 
     onMounted(() => {
       getMissions()
@@ -65,6 +60,8 @@ export default defineComponent({
       selectedSort,
       sortOptions,
       sortedMissions,
+      sortedAndSearchedPosts,
+      searchQuery,
       createMission,
       removeMission,
       showDialog,
@@ -77,11 +74,12 @@ export default defineComponent({
 <template>
   <div class="app">
     <h1>Страница с миссиями</h1>
+    <app-input v-model="searchQuery" placeholder="Поиск..."/>
     <div class="app__btns">
       <app-button @click="showDialog">Создать миссию</app-button>
       <app-select v-model="selectedSort" :options="sortOptions" label="Сортировка"/>
     </div>
-    <mission-list :missions="sortedMissions" @remove="removeMission" v-if="missions.length" />
+    <mission-list :missions="sortedAndSearchedPosts" @remove="removeMission" v-if="missions.length" />
     <div v-else>Идет загрузка...</div>
     <app-dialog v-model:show="dialogVisible">
       <mission-form @create="createMission" />

@@ -4,7 +4,13 @@
   box-sizing: border-box;
 }
 
+#app {
+  display: flex;
+  justify-content: center;
+}
+
 .app {
+  width: 30%;
   padding: 20px;
   display: flex;
   flex-direction: column;
