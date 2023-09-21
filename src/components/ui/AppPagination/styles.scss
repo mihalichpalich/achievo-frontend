@@ -1,0 +1,16 @@
+.pagination {
+  display: flex;
+  margin-top: 15px;
+  column-gap: 0.3vw;
+  font-size: 0.8rem;
+
+  &__page {
+    border: 1px solid black;
+    padding: 5px;
+    cursor: pointer;
+
+    &_current {
+      border: 2px solid teal;
+    }
+  }
+}

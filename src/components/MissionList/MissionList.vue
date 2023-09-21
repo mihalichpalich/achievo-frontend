@@ -20,6 +20,7 @@ export default defineComponent({
 <template>
   <div v-if="missions.length > 0">
     <h3>Список миссий</h3>
+    <slot></slot>
     <transition-group name="mission-list">
       <mission-item
           v-for="mission in missions"
@@ -29,5 +30,5 @@ export default defineComponent({
       />
     </transition-group>
   </div>
-  <h2 v-else class="empty-message">Список миссий пуст</h2>
+  <h2 v-else class="mission-list__empty-message">Список миссий пуст</h2>
 </template>

@@ -6,18 +6,25 @@ import MissionList from "@/components/MissionList/MissionList.vue";
 import AppDialog from "@/components/ui/AppDialog/AppDialog.vue";
 import AppButton from "@/components/ui/AppButton/AppButton.vue";
 import AppSelect from "@/components/ui/AppSelect/AppSelect.vue";
+import AppPagination from "@/components/ui/AppPagination/AppPagination.vue";
+import AppInput from "@/components/ui/AppInput/AppInput.vue";
 
 import { Mission } from "@/types/mission";
 import { fetchMissions } from "@/services/missions";
 import { sortOptions } from "@/dicts/sortOptions";
 
 export default defineComponent({
-  components: {AppSelect, AppButton, AppDialog, MissionForm, MissionList},
+  components: {AppSelect, AppButton, AppDialog, MissionForm, MissionList, AppPagination, AppInput},
   setup() {
     const missions: Ref<Mission[]> = ref([]);
     const dialogVisible = ref(false)
     const selectedSort = ref<'title' | 'body' | ''>('')
     const searchQuery = ref('')
+    const page = ref(1)
+    const limit = ref(5)
+    const totalPages = ref(0)
+
+    watch(page, () => getMissions())
 
     const sortedMissions = computed(() => [...missions.value].sort((m1, m2) => {
       if (selectedSort.value) {
@@ -48,10 +55,15 @@ export default defineComponent({
     }
 
     const getMissions = async () => {
-      const res = await fetchMissions()
+      const res = await fetchMissions(page.value, limit.value)
       if (res) {
         missions.value = res.data
+        totalPages.value = Math.ceil(res.headers['x-total-count'] / limit.value)
       }
+    }
+
+    const changePage = (pageNumber: number) => {
+      page.value = pageNumber
     }
 
     return {
@@ -62,10 +74,12 @@ export default defineComponent({
       sortedMissions,
       sortedAndSearchedPosts,
       searchQuery,
+      page,
+      totalPages,
       createMission,
       removeMission,
       showDialog,
-      getMissions
+      changePage
     };
   },
 });
@@ -79,7 +93,9 @@ export default defineComponent({
       <app-button @click="showDialog">Создать миссию</app-button>
       <app-select v-model="selectedSort" :options="sortOptions" label="Сортировка"/>
     </div>
-    <mission-list :missions="sortedAndSearchedPosts" @remove="removeMission" v-if="missions.length" />
+    <mission-list :missions="sortedAndSearchedPosts" @remove="removeMission" v-if="missions.length">
+      <app-pagination :page="page" :total="totalPages" @changePage="changePage"/>
+    </mission-list>
     <div v-else>Идет загрузка...</div>
     <app-dialog v-model:show="dialogVisible">
       <mission-form @create="createMission" />

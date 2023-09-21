@@ -1,21 +1,36 @@
-.empty-message {
-  color: red;
-}
+.mission-list {
+  &-item {
+    display: inline-block;
+    margin-right: 10px;
+  }
 
-.mission-list-item {
-  display: inline-block;
-  margin-right: 10px;
-}
+  &-enter {
+    &-active {
+      transition: all 0.4s ease;
+    }
 
-.mission-list-enter-active, .mission-list-leave-active {
-  transition: all 0.4s ease;
-}
+    &-from {
+      opacity: 0;
+      transform: translateX(130px);
+    }
+  }
 
-.mission-list-enter-from, .mission-list-leave-to {
-  opacity: 0;
-  transform: translateX(130px);
-}
+  &-leave {
+    &-active {
+      transition: all 0.4s ease;
+    }
 
-.mission-list-move {
-  transition: transform 0.4s ease;
+    &-to {
+      opacity: 0;
+      transform: translateX(130px);
+    }
+  }
+
+  &-move {
+    transition: transform 0.4s ease;
+  }
+
+  &__empty-message {
+    color: red;
+  }
 }
