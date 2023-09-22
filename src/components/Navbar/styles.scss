@@ -1,0 +1,19 @@
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  padding: 0 15px;
+  background-color: lightgrey;
+  box-shadow: 2px 2px 4px gray;
+
+  &__logo {
+    cursor: pointer;
+  }
+
+  &__btns {
+    display: flex;
+    column-gap: 20px;
+  }
+}
