@@ -24,8 +24,6 @@ export default defineComponent({
     const limit = ref(5)
     const totalPages = ref(0)
 
-    watch(page, () => getMissions())
-
     const sortedMissions = computed(() => [...missions.value].sort((m1, m2) => {
       if (selectedSort.value) {
         return m1[selectedSort.value].localeCompare(m2[selectedSort.value])
@@ -50,14 +48,11 @@ export default defineComponent({
       missions.value = missions.value.filter((m) => m.id !== mission.id);
     };
 
-    const showDialog = () => {
-      dialogVisible.value = true
-    }
-
     const getMissions = async () => {
       const res = await fetchMissions(page.value, limit.value)
       if (res) {
-        missions.value = res.data
+        ++page.value
+        missions.value = [...missions.value, ...res.data]
         totalPages.value = Math.ceil(res.headers['x-total-count'] / limit.value)
       }
     }
@@ -78,8 +73,8 @@ export default defineComponent({
       totalPages,
       createMission,
       removeMission,
-      showDialog,
-      changePage
+      changePage,
+      getMissions
     };
   },
 });
@@ -93,9 +88,14 @@ export default defineComponent({
       <app-button @click="showDialog">Создать миссию</app-button>
       <app-select v-model="selectedSort" :options="sortOptions" label="Сортировка"/>
     </div>
-    <mission-list :missions="sortedAndSearchedPosts" @remove="removeMission" v-if="missions.length">
-      <app-pagination :page="page" :total="totalPages" @changePage="changePage"/>
-    </mission-list>
+    <mission-list
+        :missions="sortedAndSearchedPosts"
+        :page="page"
+        :total-pages="totalPages"
+        @remove="removeMission"
+        v-if="missions.length"
+        @loadData="getMissions"
+    />
     <div v-else>Идет загрузка...</div>
     <app-dialog v-model:show="dialogVisible">
       <mission-form @create="createMission" />

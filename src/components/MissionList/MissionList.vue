@@ -3,7 +3,7 @@
 </style>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import MissionItem from "../MissionItem/MissionItem.vue";
 
 export default defineComponent({
@@ -13,7 +13,36 @@ export default defineComponent({
       type: Array,
       required: true,
     },
+    page: {
+      type: Number,
+      required: true,
+    },
+    totalPages: {
+      type: Number,
+      required: true,
+    }
   },
+  setup(_, { emit }) {
+    const observerRef = ref<Element | null>(null)
+
+    onMounted(() => {
+      const options = {
+        rootMargin: '0px',
+        threshold: 1.0
+      }
+      const callback: IntersectionObserverCallback = (entries, observer) => {
+        if (entries[0].isIntersecting) {
+          emit('loadData')
+        }
+      }
+      const observer = new IntersectionObserver(callback, options)
+      observerRef.value && observer.observe(observerRef.value)
+    });
+
+    return {
+      observerRef
+    }
+  }
 });
 </script>
 
@@ -29,6 +58,7 @@ export default defineComponent({
           @remove="$emit('remove', mission)"
       />
     </transition-group>
+    <div ref="observerRef" class="mission-list__observer"></div>
   </div>
   <h2 v-else class="mission-list__empty-message">Список миссий пуст</h2>
 </template>
