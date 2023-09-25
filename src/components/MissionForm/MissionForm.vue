@@ -34,7 +34,7 @@ export default defineComponent({
 <template>
   <form action="#" @submit.prevent>
     <h4>Создание миссии</h4>
-    <app-input type="text" placeholder="Название" v-model="mission.title" />
+    <app-input type="text" placeholder="Название" v-model="mission.title" v-focus />
     <app-input type="text" placeholder="Описание" v-model="mission.body" />
     <app-button @click="createMission">Создать</app-button>
   </form>
