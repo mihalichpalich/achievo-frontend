@@ -1,4 +1,4 @@
-<style scoped>
+<style scoped lang="scss">
 @import "styles.scss";
 </style>
 
@@ -6,8 +6,10 @@
 import { defineComponent } from "vue";
 
 import { Mission } from "@/types/mission";
+import AppButton from "@/components/ui/AppButton/AppButton.vue";
 
 export default defineComponent({
+  components: {AppButton},
   props: {
     mission: {
       type: Object as () => Mission,
@@ -30,6 +32,7 @@ export default defineComponent({
       </div>
     </div>
     <div class="mission__btns">
+      <app-button @click="$router.push(`/missions/${mission.id}`)">Открыть</app-button>
       <app-button @click="$emit('remove', mission)">Удалить</app-button>
     </div>
   </div>
