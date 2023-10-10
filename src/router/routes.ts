@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import MainPage from "@/pages/MainPage.vue";
-import MissionPage from "@/pages/MissionPage.vue";
+import MissionPage from "@/pages/MissionPage/MissionPage.vue";
 import AboutPage from "@/pages/AboutPage.vue";
 import MissionIdPage from "@/pages/MissionIdPage.vue";
 

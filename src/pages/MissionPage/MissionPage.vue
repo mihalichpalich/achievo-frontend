@@ -1,5 +1,5 @@
 <script lang="ts">
-import { ref, defineComponent, Ref, onMounted, computed } from "vue";
+import { ref, defineComponent, Ref, onMounted, computed, toRefs } from "vue";
 
 import MissionForm from "@/components/MissionForm/MissionForm.vue";
 import MissionList from "@/components/MissionList/MissionList.vue";
@@ -10,12 +10,15 @@ import AppPagination from "@/components/ui/AppPagination/AppPagination.vue";
 import AppInput from "@/components/ui/AppInput/AppInput.vue";
 
 import { Mission } from "@/types/mission";
-import { fetchMissions } from "@/services/missions";
+import { fetchMissions } from "@/api/missions/missions";
 import { sortOptions } from "@/dicts/sortOptions";
+import { useLikesStore } from "@/store/likes";
 
 export default defineComponent({
   components: {AppSelect, AppButton, AppDialog, MissionForm, MissionList, AppPagination, AppInput},
   setup() {
+    const likesStore = useLikesStore()
+    const { likes, doubleLikes } = toRefs(likesStore)
     const missions: Ref<Mission[]> = ref([]);
     const dialogVisible = ref(false)
     const selectedSort = ref<'title' | 'body' | ''>('')
@@ -62,6 +65,8 @@ export default defineComponent({
     }
 
     return {
+      likes,
+      doubleLikes,
       missions,
       dialogVisible,
       selectedSort,
@@ -70,6 +75,8 @@ export default defineComponent({
       searchQuery,
       page,
       totalPages,
+      incrementLikes: likesStore.incrementLikes,
+      decrementLikes: likesStore.decrementLikes,
       showDialog,
       createMission,
       removeMission,
@@ -81,6 +88,13 @@ export default defineComponent({
 
 <template>
   <div>
+    <span>likes: {{ likes }}</span>
+    <br/>
+    <span>doubleLikes: {{ doubleLikes }}</span>
+    <div>
+      <app-button @click="incrementLikes">Лайк</app-button>
+      <app-button @click="decrementLikes">Дислайк</app-button>
+    </div>
     <h1>Страница с миссиями</h1>
     <app-input v-model="searchQuery" placeholder="Поиск..."/>
     <div class="app__btns">
